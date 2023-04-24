@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum CustomGraphEdges {
     case left, right, top, bottom

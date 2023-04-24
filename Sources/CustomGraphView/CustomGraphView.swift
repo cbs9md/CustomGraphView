@@ -123,7 +123,6 @@ struct CustomGraphView: View {
                 let denominator = CGFloat(container.xAxisLabels.count-1)
                 Text("\(container.xAxisLabels[i])")
                     .padding(5)
-//                    .font(.caption)
                     .rotationEffect(.degrees(45))
                     .offset(x: (numerator/denominator)*width-18)
             }
@@ -138,7 +137,6 @@ struct CustomGraphView: View {
                 let denominator = CGFloat(container.yAxisLabels.count-1)
                 Text(container.yAxisLabels[i])
                     .padding(5)
-//                    .font(.caption)
                     .offset(y: (numerator/denominator)*height-24)
                     .foregroundColor(.gray)
             }
@@ -152,7 +150,6 @@ struct CustomGraphView: View {
             let columnWidth = width / CGFloat(5)
             
             // Vertical grid lines
-            
             if style.gridEdges.contains(.left) {
                 path.move(to: CGPoint(x: columnWidth * CGFloat(0), y: 0))
                 path.addLine(to: CGPoint(x: columnWidth * CGFloat(0), y: height))
@@ -169,7 +166,6 @@ struct CustomGraphView: View {
             }
             
             // Horizontal grid lines
-            
             if style.gridEdges.contains(.top) {
                 path.move(to: CGPoint(x: 0, y: rowHeight * CGFloat(0)))
                 path.addLine(to: CGPoint(x: width, y: rowHeight * CGFloat(0)))
@@ -323,7 +319,7 @@ struct CustomGraphView: View {
             .overlay(
                 HStack(spacing: 0) {
                     ForEach(0..<container.count) { i in
-                        Color.white.opacity(0.3).border(.blue)
+                        Color.clear
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 self.index = Double(i)
