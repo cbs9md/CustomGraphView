@@ -112,7 +112,6 @@ struct CustomGraphView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .font(.custom("Raleway-Regular", size: 13))
         .foregroundColor(.white)
     }
     
@@ -125,6 +124,7 @@ struct CustomGraphView: View {
                     .padding(5)
                     .rotationEffect(.degrees(45))
                     .offset(x: (numerator/denominator)*width-18)
+                    .font(.footnote)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -139,6 +139,7 @@ struct CustomGraphView: View {
                     .padding(5)
                     .offset(y: (numerator/denominator)*height-24)
                     .foregroundColor(.gray)
+                    .font(.footnote)
             }
             .frame(maxHeight: .infinity, alignment: .top)
         }
@@ -299,7 +300,7 @@ struct CustomGraphView: View {
                         Text(String(format: "%.1f", value))
                             .bold()
                             .padding(10)
-                            .background(Color("BraveDullBlue").opacity(0.6))
+                            .background(Color.black.opacity(0.6))
                             .clipShape(Circle())
                             .overlay(Circle().stroke().foregroundColor(color))
                             .scaleEffect(1.5)
@@ -339,13 +340,13 @@ struct CustomGraphView: View {
                         .frame(width: 35, height: 3)
                         .foregroundColor(data.color)
                     Text(data.legendTitle)
-                        .font(.custom("Raleway-Regular", size: 15))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                 }
             }
             Spacer()
         }
+        .font(.footnote)
         .padding(.vertical, 10)
     }
 }
@@ -356,24 +357,52 @@ class CustomGraphViewModel: ObservableObject {
 
 struct CustomGraphViewPreview: View {
     @State var index = 0.0
+    let container = CustomGraphDataContainer.dummyData()
     var body: some View {
-        CustomGraphView(container: CustomGraphDataContainer.dummyData(), index: $index, style: CustomGraphViewStyle(showLegend: true,
-                                                                                                                            noDataMessage: "", showSlider: true, showYAxisLabels: true, gridEdges: [],
-                                                                                                                            showValuesOnGraph: false, showValueOverSlider: false))
-            .padding(40)
-            .background(Color("BraveDarkBlue").ignoresSafeArea())
-            .animation(.linear)
+        VStack {
+            CustomGraphView(container: container, index: $index, style: CustomGraphViewStyle(showLegend: true,
+                                                                                                                                noDataMessage: "", showSlider: true, showYAxisLabels: true, gridEdges: [],
+                                                                                                                                showValuesOnGraph: false, showValueOverSlider: false))
+                .padding(40)
+                .animation(.linear)
+            HStack {
+                ForEach(container.datas) { data in
+                    HStack {
+                        data.color
+                            .frame(width: 25, height: 25)
+                            .cornerRadius(4)
+                        if let value = data.points[Int(index)].value {
+                            Text("\(Int(value))")
+                                .padding()
+                                .font(.title)
+                        } else {
+                            Text("-")
+                                .padding()
+                                .font(.title)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    if data.id != container.datas.last?.id {
+                        Divider()
+                    }
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 
 struct CustomGraphView_Previews: PreviewProvider {
     static var previews: some View {
         CustomGraphViewPreview()
+            .preferredColorScheme(.dark)
+
     }
 }
 
 extension CustomGraphDataContainer {
     static func dummyData() -> CustomGraphDataContainer {
-        return CustomGraphDataContainer(datas: [CustomGraphData(points: [0].map { CustomGraphDataPoint(value: $0) }, color: .purple, legendTitle: "Left" ), CustomGraphData(points: [nil].map { CustomGraphDataPoint(value: $0) }, color: .pink, legendTitle: "Right")], max: 5, min: -5)
+        return CustomGraphDataContainer(datas: [CustomGraphData(points: [0, 5, 5, 7, 8].map { CustomGraphDataPoint(value: $0) }, color: .purple, legendTitle: "Purple" ), CustomGraphData(points: [nil, 3, 7, 5, nil].map { CustomGraphDataPoint(value: $0) }, color: .pink, legendTitle: "Pink")], max: 10, min: -10)
     }
 }
