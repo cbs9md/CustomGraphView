@@ -7,18 +7,20 @@ A SwiftUI Package for graphing line charts. Inspiration from SwiftUICharts by wi
 
 # Tutorial
 
-Make a CustomGraphDataContainer
-
+Initialize an array of CustomGraphDataPoint for every line you want to display on the graph
 ```
-# initialize an array of CustomGraphDataPoint for every line you want to display on the graph
 let dataPointsOne = [0, 5, 5, 7, 8].map { CustomGraphDataPoint(value: $0) }
 let dataPointsTwo = [nil, 3, 7, 5, nil].map { CustomGraphDataPoint(value: $0) }
+```
 
-# Wrap each array in a CustomGraphData, customizing the line color and legend title
+Wrap each array in a CustomGraphData, customizing the line color and legend title
+```
 let graphDataOne = CustomGraphData(points: dataPointsOne, color: .purple, legendTitle: "Purple")
 let graphDataTwo = CustomGraphData(points: dataPointsTwo, color: .pink, legendTitle: "Pink")
+```
 
-# Create a CustomGraphDataContainer from each CustomGraphData, specifying the max and min of the graph
+Create a CustomGraphDataContainer from each CustomGraphData, specifying the max and min of the graph
+```
 let container = CustomGraphDataContainer(datas: [graphDataOne, graphDataTwo], max: 10, min: -10)
 ```
 
